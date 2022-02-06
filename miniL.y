@@ -93,16 +93,6 @@ Identifiers: Identifier {printf("Identifiers -> Identifier\n");};
 Function: FUNCTION Identifier SEMI BEGINPARAMS Declarations ENDPARAMS BEGINLOCALS Declarations ENDLOCALS BEGINBODY Statements ENDBODY
           {printf("Functions -> FUNCTION Identifier ';' BEGINPARAMS Declarations ENDPARAMS BEGINLOCALS Declarations ENDLOCALS BEGINBODY Statements ENDBODY\n");};
 
-<<<<<<< HEAD
-Declaration: Identifier COLON INTEGER { printf("Declaration -> Identifier ':' INTEGER\n"); }
-           | Identifier COLON ARRAY '[' NUMBER ']' OF INTEGER { printf("Declaration -> Identifier ':' ARRAY '[' INT ']' OF INTEGER");}
-
-Declarations: Declaration SEMI Declarations {printf("Declarations -> Declaration ';' Declarations\n");} 
-            | {printf("Declarations -> epsilon\n");}
-
-Statements: Statement SEMI Statements {printf("Statements -> Statement ';' Statements\n");}
-          | {printf("Statements -> epsilon\n");}
-=======
 Declarations: %empty {printf("Declarations -> epsilon\n");}
         | Declaration SEMI Declarations {printf("Declarations -> Declaration ';' Declarations\n");} ;
 
@@ -114,7 +104,6 @@ Statements: Statement SEMI Statements {printf("Statements -> Statement ';' State
 
 Statementss: ELSE Statements {printf("Statementss -> ELSE Statements\n");};
         | %empty {printf("Statementss -> epsilon\n");};
->>>>>>> 408b6962ac7e7c079a9527696a4a232eb49846b4
 
 Statement: Var ASSIGN Expression {printf("Statement -> Var ':=' Expression\n");}
          | IF Bool_Exp THEN Statements Statementss ENDIF {printf("Statement -> IF Bool_Exp THEN Statements Statementss ENDIF\n");};
