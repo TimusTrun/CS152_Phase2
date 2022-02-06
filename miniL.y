@@ -88,11 +88,11 @@ Program: Functions Program {printf("Program -> Functions Program\n");}
 Functions: FUNCTION Identifier SEMI BEGINPARAMS Declarations ENDPARAMS BEGINLOCALS Declarations ENDLOCALS BEGINBODY Statements ENDBODY
           {printf("Functions -> FUNCTION Identifier ';' BEGINPARAMS Declarations ENDPARAMS BEGINLOCALS Declarations ENDLOCALS BEGINBODY Statements ENDBODY\n");} 
 
-Declarations: Declaration SEMI Declarations {printf("Declarations -> Declaration ';' Declarations\n");} 
-            | {printf("Declarations -> epsilon\n");}
-
 Declaration: Identifier COLON INTEGER { printf("Declaration -> Identifier ':' INTEGER\n"); }
            | Identifier COLON ARRAY '[' NUMBER ']' OF INTEGER { printf("Declaration -> Identifier ':' ARRAY '[' INT ']' OF INTEGER");}
+
+Declarations: Declaration SEMI Declarations {printf("Declarations -> Declaration ';' Declarations\n");} 
+            | {printf("Declarations -> epsilon\n");}
 
 Statements: Statement SEMI Statements {printf("Statements -> Statement ';' Statements\n");}
           | {printf("Statements -> epsilon\n");}
