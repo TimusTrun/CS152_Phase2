@@ -47,7 +47,7 @@ extern int yydebug;
   {
     UMINUS = 258,
     NUMBER = 259,
-    Identifier = 260,
+    IDENT = 260,
     Terms = 261,
     INTEGER = 262,
     FUNCTION = 263,
@@ -78,21 +78,22 @@ extern int yydebug;
     SUB = 288,
     ADD = 289,
     MULT = 290,
-    DIV = 291,
-    EQ = 292,
-    NEQ = 293,
-    LT = 294,
-    GT = 295,
-    LTE = 296,
-    GTE = 297,
-    LPAREN = 298,
-    RPAREN = 299,
-    LBRACKET = 300,
-    RBRACKET = 301,
-    COLON = 302,
-    SEMI = 303,
-    COMMA = 304,
-    ASSIGN = 305
+    MOD = 291,
+    DIV = 292,
+    EQ = 293,
+    NEQ = 294,
+    LT = 295,
+    GT = 296,
+    LTE = 297,
+    GTE = 298,
+    LPAREN = 299,
+    RPAREN = 300,
+    LBRACKET = 301,
+    RBRACKET = 302,
+    COLON = 303,
+    SEMI = 304,
+    COMMA = 305,
+    ASSIGN = 306
   };
 #endif
 
@@ -109,7 +110,7 @@ union YYSTYPE
   struct T *tval;
   /* put your types here */
 
-#line 113 "y.tab.h" /* yacc.c:1909  */
+#line 114 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
