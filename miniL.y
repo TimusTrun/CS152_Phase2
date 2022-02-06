@@ -2,6 +2,8 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+extern int row;
+extern int column;
 void yyerror(const char *msg);
 %}
 
@@ -29,6 +31,7 @@ void yyerror(const char *msg);
 
 %token <ival> NUMBER
 %token <sval> IDENT
+%token SYNTAX
 %token Terms
 %token INTEGER 
 %token FUNCTION
@@ -104,7 +107,6 @@ Statements: Statement SEMI Statements {printf("Statements -> Statement ';' State
 
 Statementss: ELSE Statements {printf("Statementss -> ELSE Statements\n");};
         | %empty {printf("Statementss -> epsilon\n");};
->>>>>>> 408b6962ac7e7c079a9527696a4a232eb49846b4
 
 Statement: Var ASSIGN Expression {printf("Statement -> Var ':=' Expression\n");}
          | IF Bool_Exp THEN Statements Statementss ENDIF {printf("Statement -> IF Bool_Exp THEN Statements Statementss ENDIF\n");};
@@ -154,5 +156,5 @@ int main(int argc, char **argv) {
 }
 
 void yyerror(const char *msg) {
-    /* implement your error handling */
+    printf("Line %d: %s\n", row, msg);
 }
