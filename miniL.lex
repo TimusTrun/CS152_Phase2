@@ -31,7 +31,7 @@ COMMENT     ##.*
 "beginbody"    {return BEGINBODY;}
 "endbody"      {return ENDBODY;}
 "integer"      {return INTEGER;}
-"array"        {return ARRARY;}
+"array"        {return ARRAY;}
 "of"           {return OF;}
 "if"           {return IF;}
 "then"         {return THEN;}
@@ -49,29 +49,29 @@ COMMENT     ##.*
 "true"         {return TRUE;}
 "false"        {return FALSE;}
 "return"       {return RETURN;}
-"-"            {return '-';}
-"+"            {return '+';}
-"*"            {return '*';}
-"/"            {return '/';}
-"%"            {return '%';}
-"=="           {return '==';}
-"<>"           {return '<>';}
-"<"            {return '<';}
-">"            {return '>';}
-"<="           {return '<=';}
-">="           {return '>=';}
+"-"            {return SUB;}
+"+"            {return ADD;}
+"*"            {return MULT;}
+"/"            {return DIV;}
+"%"            {return MOD;}
+"=="           {return EQ;}
+"<>"           {return NEQ;}
+"<"            {return LT;}
+">"            {return GT;}
+"<="           {return LTE;}
+">="           {return GTE;}
 {DIGIT}+       {yylval.ival = atoi(yytext); return NUMBER;}
 {START}+       {printf("Error at line %i, column %i: identifier \"%s\" must begin with a letter", row, column, yytext); exit(0);} //fix?
 {END}+         {printf("Error at line %i, column %i: identifier \"%s\" cannot end with an underscore", row, column, yytext); exit(0);} //fix?
 {IDENTIFIER}+  {printf(yylval.sval = strdup(yytext); return Identifier;}
-";"            {return ';';}
-":"            {return ':';}
-","            {return ',';}
-"("            {return '(';}
-")"            {return ')';}
-"["            {return '[';} 
-"]"            {return ']';}
-":="           {return ':=';}
+";"            {return SEMI;}
+":"            {return COLON;}
+","            {return COMMA;}
+"("            {return LPAREN;}
+")"            {return RPAREN;}
+"["            {return LBRACKET;} 
+"]"            {return RBRACKET;}
+":="           {return ASSIGN;}
 
 .              {printf("ERROR\n"); exit(1);}
 
