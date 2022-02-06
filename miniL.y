@@ -62,12 +62,36 @@ Statement: Var ':=' Expression {printf("Statement -> Var ':=' Expression\n");}
          | BREAK printf("Statement -> BREAK\n");}
          | RETURN Expression printf("Statement -> RETURN Expression\n");}
 
+Bool_Exp: Bool_Exps Expression Comp Expression {printf("Bool_Exp -> Bool_Exps Expression Comp Expression\n");} 
+
+Bool_Exps: NOT Bool_Exps {printf("Bool_Exps -> NOT Bool_Exps\n");}
+         | {printf("Bool_Exps -> epsilon\n");}
+
 Comp: '==' { printf("Comp -> '=='\n");}
     | '<>' { printf("Comp -> '<>'\n");}
     | '<'  { printf("Comp -> '<'\n");}
     | '>'  { printf("Comp -> '>'\n");}
     | '<=' { printf("Comp -> '<='\n");}
     | '>=' { printf("Comp -> '>='\n");}
+
+Expression: Multiplicative_Expr {printf("Expression -> Multiplicative_Expr\n");}
+          | Multiplicative_Expr Multiplicative_Exprs {printf("Expression -> Multiplicative_Expr Multiplicative_Exprs\n");}
+
+Expressions: ',' Expressions {printf("Expressions -> ',' Expressions\n");}
+           | {printf("Expressions -> epsilon\n");}
+
+Multiplicative_Expr: Term {printf("Multiplicative_Expr -> Term\n");}
+                   | Term Terms {printf("Multiplicative_Expr -> Term Terms\n");}
+
+Multiplicative_Exprs: '+' Multiplicative_Exprs {printf("Multiplicative_Exprs -> '+' Multiplicative_Exprs\n");}
+                    | '-' Multiplicative_Exprs {printf("Multiplicative_Exprs -> '-' Multiplicative_Exprs\n");}
+                    | {printf("Multiplicative_Exprs -> epsilon\n");}
+
+Term: Var {printf("Term -> Var\n");}
+    | NUMBER {printf("Term -> NUMBER\n");}
+    | '(' Expression ')' {printf("Term -> '(' Expression ')'\n");}
+    | Identifier '(' ')' {printf("Term -> Identifier '(' ')'\n");}
+    | Identifier '(' Expressions ')' {printf("Term -> Identifier '(' Expressions ')'\n");}
 
 Var: Identifier { printf("Var -> Identifier\n");}
    | Identifier '[' Expression ']' { printf("Var -> dentifier '[' Expression ']'\n");}
