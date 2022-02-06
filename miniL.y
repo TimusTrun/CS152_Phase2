@@ -28,29 +28,49 @@ void yyerror(const char *msg);
 
 
 
-%start S
+%start Program
 
-%token INTEGER
-%token <ival> INT
-%type <ival> S
-%type <sval> Identifier
+%token INTEGER 
+%token <ival> NUMBER
+%token <sval> Identifier
 %% 
 
-S: INT '+' INT {
-  printf("In parser: %d + %d\n", $1, $3);
-}
 
-Declaration: Identifier ':' INTEGER
-           | Identifier ':' ARRARY '[' INT ']' OF INTEGER
+Program: Functions Program {printf("Program -> Functions Program\n");} 
+       | {printf("Program -> epsilon\n");}
 
-E : E '+' E
-  | E '-' E
-  | E '*' E
-  | E '/' E
-  | '-' E %prec UMINUS
-  | INT
-  | '(' E ')'
-  ;
+Functions: FUNCTION Identifier ';' BEGINPARAMS Declarations ENDPARAMS BEGINLOCALS Declarations ENDLOCALS BEGINBODY Statements ENDBODY
+          {printf("Functions -> FUNCTION Identifier ';' BEGINPARAMS Declarations ENDPARAMS BEGINLOCALS Declarations ENDLOCALS BEGINBODY Statements ENDBODY\n");} 
+
+Declarations: Declaration ';' Declarations {printf("Declarations -> Declaration ';' Declarations\n");} 
+            | {printf("Declarations -> epsilon\n");}
+
+Declaration: Identifier ':' INTEGER { printf("Declaration -> Identifier ':' INTEGER\n"); }
+           | Identifier ':' ARRARY '[' NUMBER ']' OF INTEGER { printf("Declaration -> Identifier ':' ARRARY '[' INT ']' OF INTEGER");}
+
+Statements: Statement ';' Statements {printf("Statements -> Statement ';' Statements\n");}
+          | {printf("Statements -> epsilon\n");}
+
+Statement: Var ':=' Expression {printf("Statement -> Var ':=' Expression\n");}
+         | IF Bool_Exp THEN Statements ENDIF {printf("Statement -> IF Bool_Exp THEN Statements ENDIF\n");}
+         | IF Bool_Exp THEN Statements ELSE Statements ENDIF {printf("Statement -> IF Bool_Exp THEN Statements ELSE Statements ENDIF\n");}
+         | WHILE Bool_Exp BEGINLOOP Statements ENDLOOP {printf("Statement -> WHILE Bool_Exp BEGINLOOP Statements ENDLOOP\n");}
+         | DO BEGINLOOP Statements ENDLOOP WHILE Bool_Exp {printf("Statement -> DO BEGINLOOP Statements ENDLOOP WHILE Bool_Exp\n");}
+         | READ Var {printf("Statement -> READ Var\n");}
+         | WRITE Var printf("Statement -> WRITE Var\n");}
+         | CONTINUE printf("Statement -> CONTINUE\n");}
+         | BREAK printf("Statement -> BREAK\n");}
+         | RETURN Expression printf("Statement -> RETURN Expression\n");}
+
+Comp: '==' { printf("Comp -> '=='\n");}
+    | '<>' { printf("Comp -> '<>'\n");}
+    | '<'  { printf("Comp -> '<'\n");}
+    | '>'  { printf("Comp -> '>'\n");}
+    | '<=' { printf("Comp -> '<='\n");}
+    | '>=' { printf("Comp -> '>='\n");}
+
+Var: Identifier { printf("Var -> Identifier\n");}
+   | Identifier '[' Expression ']' { printf("Var -> dentifier '[' Expression ']'\n");}
 
 %% 
 
