@@ -28,8 +28,7 @@ void yyerror(const char *msg);
 %start Program
 
 %token <ival> NUMBER
-%token <sval> Identifier
-
+%token <sval> IDENT
 %token Terms
 %token INTEGER 
 %token FUNCTION
@@ -62,6 +61,7 @@ void yyerror(const char *msg);
 %left SUB 
 %left ADD
 %left MULT 
+%left MOD
 %left DIV
 %left EQ
 %left NEQ
@@ -82,12 +82,18 @@ void yyerror(const char *msg);
 %% 
 
 
-Program: Functions Program {printf("Program -> Functions Program\n");} 
-       | {printf("Program -> epsilon\n");}
+Program: Functions {printf("Program -> Functions\n");};
 
-Functions: FUNCTION Identifier SEMI BEGINPARAMS Declarations ENDPARAMS BEGINLOCALS Declarations ENDLOCALS BEGINBODY Statements ENDBODY
-          {printf("Functions -> FUNCTION Identifier ';' BEGINPARAMS Declarations ENDPARAMS BEGINLOCALS Declarations ENDLOCALS BEGINBODY Statements ENDBODY\n");} 
+Functions: %empty {printf("Functions -> epsilon\n");}
+    | Function Functions {printf("Functions -> Function Functions\n");};
 
+Identifier: IDENT {printf("ident -> IDENT \n");};
+Identifiers: Identifier {printf("Identifiers -> Identifier\n");};
+
+Function: FUNCTION Identifier SEMI BEGINPARAMS Declarations ENDPARAMS BEGINLOCALS Declarations ENDLOCALS BEGINBODY Statements ENDBODY
+          {printf("Functions -> FUNCTION Identifier ';' BEGINPARAMS Declarations ENDPARAMS BEGINLOCALS Declarations ENDLOCALS BEGINBODY Statements ENDBODY\n");};
+
+<<<<<<< HEAD
 Declaration: Identifier COLON INTEGER { printf("Declaration -> Identifier ':' INTEGER\n"); }
            | Identifier COLON ARRAY '[' NUMBER ']' OF INTEGER { printf("Declaration -> Identifier ':' ARRAY '[' INT ']' OF INTEGER");}
 
@@ -96,52 +102,59 @@ Declarations: Declaration SEMI Declarations {printf("Declarations -> Declaration
 
 Statements: Statement SEMI Statements {printf("Statements -> Statement ';' Statements\n");}
           | {printf("Statements -> epsilon\n");}
+=======
+Declarations: %empty {printf("Declarations -> epsilon\n");}
+        | Declaration SEMI Declarations {printf("Declarations -> Declaration ';' Declarations\n");} ;
+
+Declaration: Identifiers COLON INTEGER { printf("Declaration -> Identifier ':' INTEGER\n"); }
+           | Identifiers COLON ARRAY LBRACKET NUMBER RBRACKET OF INTEGER { printf("Declaration -> Identifier ':' ARRAY '[' INT ']' OF INTEGER");};
+
+Statements: Statement SEMI Statements {printf("Statements -> Statement ';' Statements\n");};
+          | %empty {printf("Statements -> epsilon\n");};
+
+Statementss: ELSE Statements {printf("Statementss -> ELSE Statements\n");};
+        | %empty {printf("Statementss -> epsilon\n");};
+>>>>>>> 408b6962ac7e7c079a9527696a4a232eb49846b4
 
 Statement: Var ASSIGN Expression {printf("Statement -> Var ':=' Expression\n");}
-         | IF Bool_Exp THEN Statements Statementss ENDIF {printf("Statement -> IF Bool_Exp THEN Statements Statementss ENDIF\n");}
-         | WHILE Bool_Exp BEGINLOOP Statements ENDLOOP {printf("Statement -> WHILE Bool_Exp BEGINLOOP Statements ENDLOOP\n");}
-         | DO BEGINLOOP Statements ENDLOOP WHILE Bool_Exp {printf("Statement -> DO BEGINLOOP Statements ENDLOOP WHILE Bool_Exp\n");}
-         | READ Var {printf("Statement -> READ Var\n");}
-         | WRITE Var {printf("Statement -> WRITE Var\n");}
-         | CONTINUE {printf("Statement -> CONTINUE\n");}
-         | BREAK {printf("Statement -> BREAK\n");}
-         | RETURN Expression {printf("Statement -> RETURN Expression\n");}
+         | IF Bool_Exp THEN Statements Statementss ENDIF {printf("Statement -> IF Bool_Exp THEN Statements Statementss ENDIF\n");};
+         | WHILE Bool_Exp BEGINLOOP Statements ENDLOOP {printf("Statement -> WHILE Bool_Exp BEGINLOOP Statements ENDLOOP\n");};
+         | DO BEGINLOOP Statements ENDLOOP WHILE Bool_Exp {printf("Statement -> DO BEGINLOOP Statements ENDLOOP WHILE Bool_Exp\n");};
+         | READ Var {printf("Statement -> READ Var\n");};
+         | WRITE Var {printf("Statement -> WRITE Var\n");};
+         | CONTINUE {printf("Statement -> CONTINUE\n");};
+         | BREAK {printf("Statement -> BREAK\n");};
+         | RETURN Expression {printf("Statement -> RETURN Expression\n");};
 
-Statementss: ELSE Statements {printf("Statementss -> ELSE Statements\n");}
-        | {printf("Statementss -> epsilon\n");}
-Bool_Exp: Bool_Exps Expression Comp Expression {printf("Bool_Exp -> Bool_Exps Expression Comp Expression\n");} 
 
-Bool_Exps: NOT Bool_Exps {printf("Bool_Exps -> NOT Bool_Exps\n");}
-         | {printf("Bool_Exps -> epsilon\n");}}
+Bool_Exp: Expression Comp Expression {printf("Bool_Exp -> Bool_Exps Expression Comp Expression\n");};
+        | NOT Bool_Exp{printf("BoolExp -> NOT BoolExp\n");};
 
-Comp: EQ { printf("Comp -> '=='\n");}
-    | NEQ { printf("Comp -> '<>'\n");}
-    | LT  { printf("Comp -> '<'\n");}
-    | GT  { printf("Comp -> '>'\n");}
-    | LTE { printf("Comp -> '<='\n");}
-    | GTE { printf("Comp -> '>='\n");}
+Comp: EQ { printf("Comp -> '=='\n");};
+    | NEQ { printf("Comp -> '<>'\n");};
+    | LT  { printf("Comp -> '<'\n");};
+    | GT  { printf("Comp -> '>'\n");};
+    | LTE { printf("Comp -> '<='\n");};
+    | GTE { printf("Comp -> '>='\n");};
 
-Expression: Multiplicative_Expr {printf("Expression -> Multiplicative_Expr\n");}
-          | Multiplicative_Expr Multiplicative_Exprs {printf("Expression -> Multiplicative_Expr Multiplicative_Exprs\n");}
-
-Expressions: ',' Expressions {printf("Expressions -> ',' Expressions\n");}
-           | {printf("Expressions -> epsilon\n");}
+Expression: Multiplicative_Expr {printf("Expression -> Multiplicative_Expr\n");};
+          | Multiplicative_Expr ADD Expression {printf("Expression -> Multiplicative_Expr ADD Multiplicative_Exprs\n");};
+          | Multiplicative_Expr SUB Expression {printf("Expression -> Multiplicative_Expr SUB Multiplicative_Exprs\n");};
 
 Multiplicative_Expr: Term {printf("Multiplicative_Expr -> Term\n");}
-                   | Term Terms {printf("Multiplicative_Expr -> Term Terms\n");}
+                   | Multiplicative_Expr Term MULT Multiplicative_Expr {printf("Multiplicative_Expr -> Term '*' Multiplicative_Expr\n");};
+                   | Multiplicative_Expr Term DIV Multiplicative_Expr {printf("Multiplicative_Expr -> Term '/' Multiplicative_Expr\n");};
+                   | Multiplicative_Expr Term MOD Multiplicative_Expr {printf("Multiplicative_Expr -> Term '%'  Multiplicative_Expr\n");};
 
-Multiplicative_Exprs: '+' Multiplicative_Exprs {printf("Multiplicative_Exprs -> '+' Multiplicative_Exprs\n");}
-                    | '-' Multiplicative_Exprs {printf("Multiplicative_Exprs -> '-' Multiplicative_Exprs\n");}
-                    | {printf("Multiplicative_Exprs -> epsilon\n");}
+Term: Var {printf("Term -> Var\n");};
+    | NUMBER {printf("Term -> NUMBER\n");};
+    | LPAREN Expression RPAREN {printf("Term -> '(' Expression ')'\n");};
+    | Identifier LPAREN Expression RPAREN {printf("Term -> Identifier '(' ')'\n");};
+    | Identifier LPAREN Expression COMMA RPAREN {printf("Term -> Identifier '(' Expressions ')'\n");};
+    | Identifier LPAREN RPAREN {printf("Term -> '(' ')''\n");};
 
-Term: Var {printf("Term -> Var\n");}
-    | NUMBER {printf("Term -> NUMBER\n");}
-    | '(' Expression ')' {printf("Term -> '(' Expression ')'\n");}
-    | Identifier '(' ')' {printf("Term -> Identifier '(' ')'\n");}
-    | Identifier '(' Expressions ')' {printf("Term -> Identifier '(' Expressions ')'\n");}
-
-Var: Identifier { printf("Var -> Identifier\n");}
-   | Identifier '[' Expression ']' { printf("Var -> dentifier '[' Expression ']'\n");}
+Var: Identifier { printf("Var -> Identifier\n");};
+   | Identifier LBRACKET Expression RBRACKET { printf("Var -> dentifier '[' Expression ']'\n");};
 
 %% 
 
