@@ -1,20 +1,56 @@
     /* cs152-miniL phase2 */
 %{
+#include <stdio.h>
+#include <stdlib.h>
 void yyerror(const char *msg);
 %}
 
+
+
 %union{
+  int ival;
+  char *sval;
+  float fval;
+  struct T *tval;
   /* put your types here */
 }
 
 %error-verbose
 %locations
 
-/* %start program */
+/* lower predence */
+%right  '='       /* A = (B = C)   */
+%left   '+' '-'   /* (A op B) op C */
+%left   '*' '/'   /* A op (B op C) */
+%nonassoc UMINUS
 
+/* higher precedence */
+
+
+
+%start S
+
+%token INTEGER
+%token <ival> INT
+%type <ival> S
+%type <sval> Identifier
 %% 
 
-  /* write your rules here */
+S: INT '+' INT {
+  printf("In parser: %d + %d\n", $1, $3);
+}
+
+Declaration: Identifier ':' INTEGER
+           | Identifier ':' ARRARY '[' INT ']' OF INTEGER
+
+E : E '+' E
+  | E '-' E
+  | E '*' E
+  | E '/' E
+  | '-' E %prec UMINUS
+  | INT
+  | '(' E ')'
+  ;
 
 %% 
 
