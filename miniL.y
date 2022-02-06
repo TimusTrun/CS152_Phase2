@@ -135,9 +135,9 @@ Expression: Multiplicative_Expr {printf("Expression -> Multiplicative_Expr\n");}
           | Multiplicative_Expr SUB Expression {printf("Expression -> Multiplicative_Expr SUB Multiplicative_Exprs\n");};
 
 Multiplicative_Expr: Term {printf("Multiplicative_Expr -> Term\n");}
-                   | Multiplicative_Expr Term MULT Multiplicative_Expr {printf("Multiplicative_Expr -> Term MULT Multiplicative_Expr\n");}
-                   | Multiplicative_Expr Term DIV Multiplicative_Expr {printf("Multiplicative_Expr -> Term DIV Multiplicative_Expr\n");}
-                   | Multiplicative_Expr Term MOD Multiplicative_Expr {printf("Multiplicative_Expr -> Term MOD  Multiplicative_Expr\n");}
+                   | Multiplicative_Expr Term MULT Multiplicative_Expr {printf("Multiplicative_Expr -> Term '*' Multiplicative_Expr\n");}
+                   | Multiplicative_Expr Term DIV Multiplicative_Expr {printf("Multiplicative_Expr -> Term '/' Multiplicative_Expr\n");}
+                   | Multiplicative_Expr Term MOD Multiplicative_Expr {printf("Multiplicative_Expr -> Term '%'  Multiplicative_Expr\n");}
 
 Term: Var {printf("Term -> Var\n");}
     | NUMBER {printf("Term -> NUMBER\n");}
