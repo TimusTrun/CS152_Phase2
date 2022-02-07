@@ -90,7 +90,7 @@ Program: Functions {printf("Program -> Functions\n");};
 Functions: %empty {printf("Functions -> epsilon\n");}
     | Function Functions {printf("Functions -> Function Functions\n");};
 
-Identifier: IDENT {printf("ident -> IDENT \n");};
+Identifier: IDENT {printf("Identifer -> IDENT %s \n", $1);};
 Identifiers: Identifier {printf("Identifiers -> Identifier\n");};
 
 Function: FUNCTION Identifier SEMI BEGINPARAMS Declarations ENDPARAMS BEGINLOCALS Declarations ENDLOCALS BEGINBODY Statements ENDBODY
@@ -139,7 +139,7 @@ Multiplicative_Expr: Term {printf("Multiplicative_Expr -> Term\n");}
                    | Multiplicative_Expr Term MOD Multiplicative_Expr {printf("Multiplicative_Expr -> Term '%'  Multiplicative_Expr\n");};
 
 Term: Var {printf("Term -> Var\n");};
-    | NUMBER {printf("Term -> NUMBER\n");};
+    | NUMBER {printf("Term -> NUMBER %d\n", $1);};
     | LPAREN Expression RPAREN {printf("Term -> '(' Expression ')'\n");};
     | Identifier LPAREN Expression RPAREN {printf("Term -> Identifier '(' ')'\n");};
     | Identifier LPAREN Expression COMMA RPAREN {printf("Term -> Identifier '(' Expressions ')'\n");};
