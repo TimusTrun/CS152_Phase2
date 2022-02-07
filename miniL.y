@@ -2,6 +2,8 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+extern int row;
+extern int column;
 void yyerror(const char *msg);
 %}
 
@@ -29,6 +31,7 @@ void yyerror(const char *msg);
 
 %token <ival> NUMBER
 %token <sval> IDENT
+%token SYNTAX
 %token Terms
 %token INTEGER 
 %token FUNCTION
@@ -153,5 +156,5 @@ int main(int argc, char **argv) {
 }
 
 void yyerror(const char *msg) {
-    /* implement your error handling */
+    printf("Line %d: %s\n", row, msg);
 }
